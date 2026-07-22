@@ -2,6 +2,7 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
 type LoginState = {
     success : true,
@@ -94,6 +95,21 @@ export const loginAction = async (prevState : LoginState, formData: FormData) =>
             maxAge: 60 * 60 * 24 * 7,
             sameSite : "lax",
         })
+
+        const decodedToken = jwt.decode(result.data.accessToken) as JwtPayload;
+
+        if (decodedToken.role === 'ADMIN') {
+            //server side navigation
+            redirect('/admin-dashboard',"replace");
+        }
+        else if (decodedToken.role === 'USER') {
+            //server side navigation
+            redirect('/dashboard',"replace");
+        }
+        else if (decodedToken.role === 'AUTHOR') {
+            //server side navigation
+            redirect('/author/dashboard',"replace");
+        }
 
         //server side navigation
         redirect('/dashboard',"replace");
