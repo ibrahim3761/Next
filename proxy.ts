@@ -1,7 +1,8 @@
-// import { cookies } from "next/headers";
-import jwt, { JwtPayload } from "jsonwebtoken";
+import { cookies } from "next/headers";
+import { JwtPayload } from "jsonwebtoken";
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import { jwtUtils } from "./utils/jwt";
 
 const AUTH_ROUTES = ["/login", "/register"];
 const PUBLIC_ROUTES = ["/", "/news"];
@@ -10,19 +11,25 @@ const PUBLIC_ROUTES = ["/", "/news"];
 export async function proxy(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
 
-  // const cookieStore =  await cookies()
+  const cookieStore =  await cookies()
   // const accessToken = cookieStore.get("accessToken")?.value;
 
   const accessToken = request.cookies.get("accessToken")?.value;
 
   const decodedToken = accessToken
-    ? (jwt.decode(accessToken) as JwtPayload)
+    ? jwtUtils.verifyToken(accessToken, process.env.JWT_ACCESS_SECRET as string)
     : null;
 
   let userRole = null;
 
-  if (decodedToken) {
-    userRole = decodedToken.role;
+  if (!decodedToken?.success) {
+    // token has expired or is invalid. clear the cookie
+    cookieStore.delete("accessToken");
+    return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  if (decodedToken?.success && decodedToken.data) {
+    userRole = (decodedToken.data as JwtPayload).role;
   }
 
   //user is not logged in and trying to access login or register page, redirect to dashboard
@@ -49,6 +56,18 @@ export async function proxy(request: NextRequest) {
   // Authenticated pages are accessible only if the user is logged in, otherwise redirect to login page
   if (!accessToken && !isPublicRoute && !isAuthRoute) {
     return NextResponse.redirect(new URL("/login", request.url));
+  }
+
+  //Athorization check for dashboard routes based on user role
+  if (pathname.startsWith("/dashboard") && userRole !== "USER") {
+    return NextResponse.redirect(new URL("/not-found", request.url));
+  } else if (pathname.startsWith("/admin-dashboard") && userRole !== "ADMIN") {
+    return NextResponse.redirect(new URL("/not-found", request.url));
+  } else if (
+    pathname.startsWith("/author-dashboard") &&
+    userRole !== "AUTHOR"
+  ) {
+    return NextResponse.redirect(new URL("/not-found", request.url));
   }
 
   //   return NextResponse.redirect(new URL('/', request.url))
