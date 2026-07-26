@@ -1,9 +1,9 @@
 import { Suspense } from "react";
 import { NewsSkeleton } from "../_components/news/NewsSkeleton";
 import { NewsSearchBar } from "../_components/news/NewsSearchBar";
-import { PublicNewsList } from "../_components/news/PublicNewsList";
+import { PremiumNewsList } from "../_components/news/PremiumNewsList";
 
-const NewsPage = async ({
+const PremiumPage = async ({
   searchParams,
 }: {
   searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
@@ -12,9 +12,9 @@ const NewsPage = async ({
     <div className="mx-auto max-w-7xl space-y-6 px-4 py-10 sm:px-6 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">News</h1>
+          <h1 className="text-2xl font-semibold">Premium News</h1>
           <p className="text-sm text-muted-foreground">
-            Browse the latest published stories.
+            Exclusive stories for our subscribers.
           </p>
         </div>
 
@@ -22,10 +22,10 @@ const NewsPage = async ({
       </div>
 
       <Suspense fallback={<NewsSkeleton />}>
-        <PublicNewsList searchParams={searchParams} />
+        <PremiumNewsList searchParams={searchParams} />
       </Suspense>
     </div>
   );
 };
 
-export default NewsPage;
+export default PremiumPage;
