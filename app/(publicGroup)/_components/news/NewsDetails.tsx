@@ -6,10 +6,10 @@ export function NewsDetails({ post }: { post: IPost }) {
     <article className="mx-auto max-w-3xl space-y-6 px-4 py-10 sm:px-6 lg:px-8">
       
       {/* Thumbnail */}
-      {post.thumbnail && (
+      {post.thumbnails && (
         <div className="relative h-64 w-full overflow-hidden rounded-xl sm:h-80">
           <Image
-            src={post.thumbnail}
+            src={post.thumbnails}
             alt={post.title}
             fill
             className="object-cover"
