@@ -7,7 +7,7 @@ export default async function HomePage() {
   // console.log(user);
   
   return (
-    <div>Hello
+    <div>Hello {user?.data?.profile?.name}
       <Button
       size={"xs"}
       variant={"destructive"}
