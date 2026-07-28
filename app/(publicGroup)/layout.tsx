@@ -6,7 +6,7 @@ const PublicGroupLayout = async (
     { children }: { children: React.ReactNode }
 ) => {
     const user = await getMe();
-    console.log(user);
+    // console.log(user);
     return (
         <>
             <Navbar user={user} />

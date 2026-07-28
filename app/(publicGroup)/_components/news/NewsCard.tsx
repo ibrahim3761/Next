@@ -15,9 +15,9 @@ export function NewsCard({ post }: NewsCardProps) {
   return (
     <Link href={post.isPremium ? `/premium/${post.id}` : `/news/${post.id}`}>
       <Card className="gap-4 cursor-pointer transition-shadow hover:shadow-md">
-        {post.thumbnail && (
+        {post.thumbnails && (
           <Image
-            src={post.thumbnail}
+            src={post.thumbnails}
             unoptimized
             alt={post.title}
             width={400}

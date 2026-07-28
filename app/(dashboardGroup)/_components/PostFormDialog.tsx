@@ -11,6 +11,7 @@ import { IPost } from "@/lib/type";
 import { PencilIcon, PlusIcon } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import { toast } from "sonner";
+import { createPost, updatePost } from "../_actions/myPostsActions";
 
 type PostFormDialogProps = {
     mode: "create" | "edit";
@@ -21,8 +22,8 @@ export function PostFormDialog({ mode, post }: PostFormDialogProps) {
     const [open, setOpen] = useState(false);
 
     const action = mode === "edit" && post
-        ? () =>{}
-        : () => {};
+        ? updatePost.bind(null, post.id)
+        : createPost;
 
     const [state, formAction, pending] = useActionState(action, null) as any;
 
@@ -34,6 +35,7 @@ export function PostFormDialog({ mode, post }: PostFormDialogProps) {
             // eslint-disable-next-line react-hooks/set-state-in-effect -- closing the dialog is the intended reaction to the server action's result, not a render loop
             setOpen(false);
         } else {
+            // console.log(state)
             toast.error(state.message || "Something went wrong");
         }
     }, [state, mode]);
@@ -77,11 +79,11 @@ export function PostFormDialog({ mode, post }: PostFormDialogProps) {
                         />
                     </div>
                     <div className="space-y-2">
-                        <Label htmlFor="thumbnail">Thumbnail URL</Label>
+                        <Label htmlFor="thumbnails">Thumbnail URL</Label>
                         <Input
-                            id="thumbnail"
-                            name="thumbnail"
-                            defaultValue={post?.thumbnail ?? ""}
+                            id="thumbnails"
+                            name="thumbnails"
+                            defaultValue={post?.thumbnails ?? ""}
                             placeholder="https://..."
                         />
                     </div>

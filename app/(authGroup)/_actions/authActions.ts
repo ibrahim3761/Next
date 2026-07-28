@@ -30,7 +30,7 @@ export const registerAction = async (
   prevState: RegisterState,
   formData: FormData
 ) => {
-  console.log(prevState, "prevState");
+  // console.log(prevState, "prevState");
 
   const name = formData.get("name");
   const email = formData.get("email");
@@ -57,14 +57,14 @@ export const registerAction = async (
 
   const result = await res.json();
 
-  console.log(result, "result");
+  // console.log(result, "result");
 
   return result;
 };
 
 export const loginAction = async (prevState : LoginState, formData: FormData) => {
-    console.log(formData);
-    console.log(prevState, 'prevState');
+    // console.log(formData);
+    // console.log(prevState, 'prevState');
     const email = formData.get('Email');
     const password = formData.get('Password');
 

@@ -1,8 +1,8 @@
 import { Badge } from "@/components/ui/badge";
 import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { MessageSquareIcon, SparklesIcon } from "lucide-react";
-import { IPost } from "@/lib/type";
 import { PostFormDialog } from "./PostFormDialog";
+import { IPost } from "@/lib/type";
 
 type MyPostCardProps = {
     post: IPost;
@@ -12,7 +12,7 @@ export function MyPostCard({ post }: MyPostCardProps) {
     const commentCount = post._count?.comments ?? post.comments?.length ?? 0;
 
     return (
-        <Card>
+        <Card className="w-full">
             <CardHeader>
                 <div className="flex flex-wrap items-center gap-1.5">
                     <Badge variant="outline">{post.status}</Badge>

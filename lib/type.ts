@@ -24,7 +24,7 @@ export type IPost = {
     id: string;
     title: string;
     content: string;
-    thumbnail: string | null;
+    thumbnails: string | null;
     isFeatured: boolean;
     status: IPostStatus;
     tags: string[];
