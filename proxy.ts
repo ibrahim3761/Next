@@ -86,7 +86,11 @@ export async function proxy(request: NextRequest) {
 
   // Authenticated pages are accessible only if the user is logged in, otherwise redirect to login page
   if (!accessToken && !isPublicRoute && !isAuthRoute) {
-    return NextResponse.redirect(new URL("/login", request.url));
+    const loginUrl = new URL("/login", request.url);
+
+    loginUrl.searchParams.set("redirectTo", pathname + request.nextUrl.search);
+
+    return NextResponse.redirect(loginUrl);
   }
 
   //Athorization check for dashboard routes based on user role

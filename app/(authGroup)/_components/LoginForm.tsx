@@ -6,23 +6,25 @@ import { Input } from '@/components/ui/input';
 import React, { useActionState, useEffect } from 'react'
 import { loginAction } from '../_actions/authActions';
 import { toast } from 'sonner';
+import { useSearchParams } from 'next/navigation';
 //import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
-
-    const [state, action, pending] = useActionState(loginAction, false);
+    const searchParams = useSearchParams();
+    const redirectTo = searchParams.get("redirectTo") ?? ""
+    const [state, action, pending] = useActionState(loginAction.bind(null, redirectTo), false);
     //const router = useRouter();
 
-    useEffect(()=>{
-        if(!state) return;
-        if(state.success){
+    useEffect(() => {
+        if (!state) return;
+        if (state.success) {
             toast.success(state.message);
             // client side navigation 
             //router.push('/dashboard');
-        }else{
+        } else {
             toast.error(state.message);
         }
-    },[state])
+    }, [state])
 
     return (
         <div>
